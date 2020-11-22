@@ -3,6 +3,12 @@ const flakes = ["images/flake.png", "images/flake2.png", "images/flake3.png"];
 const snowContainer = document.createElement("div");
 snowContainer.id = "snow-container";
 
+const audio = document.createElement("audio");
+audio.autoplay = true;
+audio.src = "sounds/jinglebells.mp3";
+
+snowContainer.appendChild(audio);
+
 document.body.appendChild(snowContainer);
 
 function generateFlakeContainer(flakeImg, startingPostiion, scale) {
@@ -67,6 +73,10 @@ function renderSanta() {
 
   let lastPosition = 0;
   let santaRect;
+
+  document.addEventListener("click", () => {
+    audio.play();
+  });
 
   document.addEventListener("mousemove", (e) => {
     if (!santaRect) {
