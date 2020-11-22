@@ -49,6 +49,8 @@ function generateFlakes() {
   setTimeout(generateFlakes, 500);
 }
 
+let started = false;
+
 function renderSanta() {
   const santa = document.createElement("div");
   santa.id = "santa-container";
@@ -69,17 +71,38 @@ function renderSanta() {
     reinder.appendChild(image);
     santa.appendChild(reinder);
   }
+
+  let lastPosition = 0;
+  let santaRect;
+
+  document.addEventListener("mousemove", (e) => {
+    if (!started) return;
+
+    if (!santaRect) {
+      snowContainer.appendChild(santa);
+      santaRect = santa.getBoundingClientRect();
+    }
+
+    if (lastPosition > e.pageX) {
+      santa.style.left = `${e.pageX}px`;
+      santa.classList.add("flipped-santa");
+    } else {
+      santa.classList.remove("flipped-santa");
+      santa.style.left = `${e.pageX - santaRect.width}px`;
+    }
+
+    lastPosition = e.pageX;
+    santa.style.top = `${e.pageY}px`;
+  });
 }
+renderSanta();
 
 const startButton = document.querySelector("#start");
-
-let started = false;
 
 startButton.addEventListener(
   "click",
   () => {
     generateFlakes();
-    renderSanta();
 
     audio.play();
 
@@ -88,26 +111,3 @@ startButton.addEventListener(
   },
   { once: true }
 );
-
-let lastPosition = 0;
-let santaRect;
-
-document.addEventListener("mousemove", (e) => {
-  if (!started) return;
-
-  if (!santaRect) {
-    snowContainer.appendChild(santa);
-    santaRect = santa.getBoundingClientRect();
-  }
-
-  if (lastPosition > e.pageX) {
-    santa.style.left = `${e.pageX}px`;
-    santa.classList.add("flipped-santa");
-  } else {
-    santa.classList.remove("flipped-santa");
-    santa.style.left = `${e.pageX - santaRect.width}px`;
-  }
-
-  lastPosition = e.pageX;
-  santa.style.top = `${e.pageY}px`;
-});
