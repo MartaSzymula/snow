@@ -4,7 +4,6 @@ const snowContainer = document.createElement("div");
 snowContainer.id = "snow-container";
 
 const audio = document.createElement("audio");
-audio.autoplay = true;
 audio.src = "sounds/jinglebells.mp3";
 
 snowContainer.appendChild(audio);
