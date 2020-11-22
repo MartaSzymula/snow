@@ -97,11 +97,30 @@ const startButton = document.querySelector("#start");
 startButton.addEventListener(
   "click",
   () => {
-    renderSanta();
     generateFlakes();
+    renderSanta();
+
     audio.play();
 
     startButton.remove();
   },
   { once: true }
 );
+
+document.addEventListener("mousemove", (e) => {
+  if (!santaRect) {
+    snowContainer.appendChild(santa);
+    santaRect = santa.getBoundingClientRect();
+  }
+
+  if (lastPosition > e.pageX) {
+    santa.style.left = `${e.pageX}px`;
+    santa.classList.add("flipped-santa");
+  } else {
+    santa.classList.remove("flipped-santa");
+    santa.style.left = `${e.pageX - santaRect.width}px`;
+  }
+
+  lastPosition = e.pageX;
+  santa.style.top = `${e.pageY}px`;
+});
