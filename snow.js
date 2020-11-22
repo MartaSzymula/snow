@@ -74,10 +74,6 @@ function renderSanta() {
   let lastPosition = 0;
   let santaRect;
 
-  document.addEventListener("click", () => {
-    audio.play();
-  });
-
   document.addEventListener("mousemove", (e) => {
     if (!santaRect) {
       snowContainer.appendChild(santa);
@@ -97,5 +93,16 @@ function renderSanta() {
   });
 }
 
-renderSanta();
-generateFlakes();
+const startButton = document.querySelector("#start");
+
+startButton.addEventListener(
+  "click",
+  () => {
+    renderSanta();
+    generateFlakes();
+    audio.play();
+
+    startButton.remove();
+  },
+  { once: true }
+);
