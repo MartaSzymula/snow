@@ -14,21 +14,10 @@
       }
 
       body {
-        position: relative;
         background-color: #030f29;
         display: flex;
         justify-content: center;
         align-items: center;
-      }
-
-      #snow-container {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        pointer-events: none;
       }
 
       @keyframes fall {
@@ -60,13 +49,27 @@
         }
       }
 
+      @keyframes upAndDown {
+        from {
+          top: -25%;
+        }
+
+        to {
+          top: 25%;
+        }
+      }
+
       .snow-flake-container,
-      .snow-flake {
+      #santa-container {
         position: absolute;
       }
 
+      .snow-flake,
+      .reindeer img {
+        position: relative;
+      }
+
       .snow-flake {
-        position: absolute;
         animation: rotate 6s 0s infinite linear,
           rock 2s 0s infinite alternate ease-in-out;
       }
@@ -78,7 +81,6 @@
 
       #santa-container {
         display: flex;
-        position: absolute;
         z-index: 10;
       }
 
@@ -91,40 +93,25 @@
         transform: rotateY(180deg);
       }
 
-      .reindeer {
-        position: relative;
-      }
-
-      @keyframes upAndDown {
-        from {
-          top: -25%;
-        }
-
-        to {
-          top: 25%;
-        }
-      }
-
       .reindeer img {
-        position: relative;
         top: -25%;
-      }
-
-      .reindeer:nth-child(2) img {
         animation: upAndDown 2s 0s infinite alternate ease-in-out;
       }
 
       .reindeer:nth-child(3) img {
-        animation: upAndDown 2s 1s infinite alternate ease-in-out;
+        animation-delay: 1s;
       }
 
       .reindeer:nth-child(4) img {
-        animation: upAndDown 2s 2s infinite alternate ease-in-out;
+        animation-delay: 2s;
       }
     </style>
   </head>
   <body>
     <button id="start">Włącz śnieg!</button>
     <script src="./snow.js"></script>
+    <script>
+      startSnow();
+    </script>
   </body>
 </html>
