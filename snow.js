@@ -121,6 +121,7 @@ function startSnow() {
             pointer-events: none;
         }
       `;
+    addChild(document.head, style);
   }
 
   appendStyles();
