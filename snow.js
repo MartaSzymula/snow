@@ -59,10 +59,6 @@ function startSnow() {
   }
 
   function renderSnowContainer() {
-    const audio = document.createElement("audio");
-    audio.src = "sounds/jinglebells.mp3";
-    audio.play();
-
     const snowContainer = createElement("div");
     snowContainer.id = "snow-container";
 
@@ -98,7 +94,9 @@ function startSnow() {
       if (lastPosition > e.pageX) {
         santa.style.left = `${e.pageX}px`;
         santa.classList.add("flipped-santa");
-      } else {
+      }
+
+      if (lastposition < e.pageY) {
         santa.classList.remove("flipped-santa");
         santa.style.left = `${e.pageX - santaRect.width}px`;
       }
@@ -128,17 +126,7 @@ function startSnow() {
 
   const flakes = ["images/flake.png", "images/flake2.png", "images/flake3.png"];
 
-  const startButton = document.querySelector("#start");
-
-  startButton.addEventListener(
-    "click",
-    () => {
-      const snowContainer = renderSnowContainer();
-      generateFlakes(snowContainer, flakes);
-      renderSanta(snowContainer);
-
-      startButton.remove();
-    },
-    { once: true }
-  );
+  const snowContainer = renderSnowContainer();
+  generateFlakes(snowContainer, flakes);
+  renderSanta(snowContainer);
 }
