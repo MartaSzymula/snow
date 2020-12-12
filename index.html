@@ -4,28 +4,41 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Śnieg!</title>
+
     <style>
       html,
       body {
         width: 100vw;
         height: 100vh;
-        padding: 0;
-        margin: 0;
       }
 
       body {
         background-color: #030f29;
+      }
+
+      #snow-container {
+        position: fixed;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
         display: flex;
         justify-content: center;
         align-items: center;
       }
 
+      #snow-container button {
+        pointer-events: all;
+      }
+
       @keyframes fall {
         from {
-          bottom: 105%;
+          top: 0%;
         }
+
         to {
-          bottom: 0%;
+          top: 100%;
         }
       }
 
@@ -39,7 +52,7 @@
         }
       }
 
-      @keyframes rock {
+      @keyframes leftToRight {
         from {
           left: 0%;
         }
@@ -49,70 +62,58 @@
         }
       }
 
-      @keyframes upAndDown {
-        from {
-          top: -25%;
-        }
-
-        to {
-          top: 25%;
-        }
-      }
-
-      .snow-flake-container,
-      #santa-container {
+      .flake-container {
         position: absolute;
-      }
-
-      .snow-flake,
-      .reindeer img {
-        position: relative;
-      }
-
-      .snow-flake {
-        animation: rotate 6s 0s infinite linear,
-          rock 2s 0s infinite alternate ease-in-out;
-      }
-
-      .snow-flake-container {
         padding: 0 50px;
+        top: 0;
+
         animation: fall 10s 0s 1 linear forwards;
+      }
+
+      .flake-container img {
+        position: absolute;
+        animation: rotate 6s 0s infinite linear forwards,
+          leftToRight 2s 0s infinite ease-in-out alternate;
       }
 
       #santa-container {
         display: flex;
-        z-index: 10;
-      }
-
-      .reindeer,
-      .sleigh {
-        padding: 20px 0;
-      }
-
-      .flipped-santa {
+        align-items: center;
+        position: absolute;
         transform: rotateY(180deg);
       }
 
-      .reindeer img {
-        position: relative;
-        top: -25%;
-        animation: upAndDown 2s 0s infinite alternate ease-in-out;
+      #santa-container.flipped-santa {
+        transform: rotateY(0deg);
       }
 
-      .reindeer:nth-child(3) img {
+      @keyframes moveUpAndDown {
+        from {
+          top: -20px;
+        }
+
+        to {
+          top: 20px;
+        }
+      }
+
+      .reindeer-container {
+        position: relative;
+        top: -20px;
+        padding: 20px 0;
+        animation: moveUpAndDown 2s 0s infinite alternate ease-in-out;
+      }
+
+      .reindeer-container:nth-of-type(2) {
         animation-delay: 1s;
       }
 
-      .reindeer:nth-child(4) img {
-        animation-delay: 2s;
+      .reindeer-container:nth-of-type(3) {
+        animation-delay: 3s;
       }
     </style>
   </head>
   <body>
-    <button id="start">Włącz śnieg!</button>
-    <script src="./snow.js"></script>
-    <script>
-      startSnow();
-    </script>
+    <script src="snow.js"></script>
   </body>
 </html>

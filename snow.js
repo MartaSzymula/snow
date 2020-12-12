@@ -1,146 +1,108 @@
-function startSnow() {
-  function createElement(tagName, classes = []) {
-    const element = document.createElement(tagName);
+function renderSnowContainer() {
+  const snowContainer = document.createElement('div');
+  snowContainer.id = 'snow-container';
 
-    classes.forEach((c) => {
-      element.classList.add(c);
-    });
+  document.body.appendChild(snowContainer);
 
-    return element;
+  return snowContainer;
+}
+
+const flakeImages = [
+  'images/flakes/flake.png',
+  'images/flakes/flake2.png',
+  'images/flakes/flake3.png',
+];
+
+function renderFlake(snowContainer) {
+  const flakeContainer = document.createElement('div');
+  flakeContainer.classList.add('flake-container');
+
+  flakeContainer.style.left = `${Math.random() * 100}%`;
+  flakeContainer.style.transform = `scale(${Math.random()})`;
+
+  const img = document.createElement('img');
+  img.src = flakeImages[Math.floor(Math.random() * flakeImages.length)];
+
+  flakeContainer.appendChild(img);
+
+  snowContainer.appendChild(flakeContainer);
+
+  setTimeout(renderFlake, 500, snowContainer);
+}
+
+function renderSanta(snowContainer) {
+  const santaContainer = document.createElement('div');
+  santaContainer.id = 'santa-container';
+
+  const sleighImg = document.createElement('img');
+  sleighImg.src = 'images/santa/sleigh.png';
+
+  santaContainer.appendChild(sleighImg);
+
+  for (let i = 0; i < 3; i++) {
+    const renideerContainer = document.createElement('div');
+    renideerContainer.classList.add('reindeer-container');
+
+    const reindeerImg = document.createElement('img');
+    reindeerImg.src = 'images/santa/reindeer.png';
+
+    renideerContainer.appendChild(reindeerImg);
+    santaContainer.appendChild(renideerContainer);
   }
 
-  function addChild(element, children) {
-    if (children) {
-      element.appendChild(children);
-    }
-    return element;
-  }
+  snowContainer.appendChild(santaContainer);
+}
 
-  function createImg(src, classes = []) {
-    const img = createElement("img", classes);
-    img.src = src;
-    return img;
-  }
+function addAudioElement(snowContainer) {
+  const audioElement = document.createElement('audio');
+  audioElement.src = 'sounds/jinglebells.mp3';
+  audioElement.play();
 
-  function generateFlakeContainer(flakeImg, startingPostiion, scale) {
-    const flake = createImg(flakeImg, ["snow-flake"]);
-    const flakeContainer = addChild(
-      createElement("div", ["snow-flake-container"]),
-      flake
-    );
+  snowContainer.appendChild(audioElement);
+}
 
-    flakeContainer.style.left = `${startingPostiion}%`;
-    flakeContainer.style.transform = `scale(${scale}) `;
+function addStartButton(snowContainer) {
+  const button = document.createElement('button');
+  button.innerText = 'Pada śnieg!';
+  snowContainer.appendChild(button);
+  return button;
+}
 
-    return flakeContainer;
-  }
+const snowContainer = renderSnowContainer();
+const button = addStartButton(snowContainer);
 
-  function getRandomFlake(images) {
-    const randomPosition = Math.random() * 100;
-    const randomImage = Math.floor(Math.random() * images.length);
-    const randomScale = Math.random();
-
-    return generateFlakeContainer(
-      images[randomImage],
-      randomPosition,
-      randomScale
-    );
-  }
-
-  function removeFlake(flake) {
-    flake.remove();
-  }
-
-  function generateFlakes(container, images) {
-    const flake = getRandomFlake(images);
-    addChild(container, flake);
-    setTimeout(removeFlake, 10 * 1000, flake);
-    setTimeout(generateFlakes, 500, container, images);
-  }
-
-  function renderSnowContainer() {
-    const audio = document.createElement("audio");
-    audio.src = "sounds/jinglebells.mp3";
-    audio.play();
-
-    const snowContainer = createElement("div");
-    snowContainer.id = "snow-container";
-
-    addChild(document.body, addChild(snowContainer, audio));
-    return snowContainer;
-  }
-
-  function renderSanta(container) {
-    const santa = createElement("div");
-    santa.id = "santa-container";
-
-    const sleigh = createElement("div", ["sleigh"]);
-    const sleighImage = createImg("images/sleigh.png");
-
-    addChild(santa, addChild(sleigh, sleighImage));
-
-    for (let i = 0; i < 3; i++) {
-      let reinder = createElement("div", ["reindeer"]);
-      let image = createImg("images/reindeer.png");
-
-      addChild(santa, addChild(reinder, image));
-    }
+button.addEventListener(
+  'click',
+  () => {
+    renderSanta(snowContainer);
+    renderFlake(snowContainer);
+    addAudioElement(snowContainer);
 
     let lastPosition = 0;
-    let santaRect;
+    let santaDimenstions;
 
-    document.addEventListener("mousemove", (e) => {
-      if (!santaRect) {
-        addChild(container, santa);
-        santaRect = santa.getBoundingClientRect();
+    document.addEventListener('mousemove', (e) => {
+      const santaContainer = document.querySelector('#santa-container');
+
+      santaDimenstions =
+        santaDimenstions || santaContainer.getBoundingClientRect();
+
+      if (lastPosition < e.pageX) {
+        santaContainer.classList.add('flipped-santa');
+        santaContainer.style.left = `${e.pageX - santaDimenstions.width}px`;
+        santaContainer.style.top = `${e.pageY}px`;
       }
 
       if (lastPosition > e.pageX) {
-        santa.style.left = `${e.pageX}px`;
-        santa.classList.add("flipped-santa");
-      }
-
-      if (lastPosition < e.pageX) {
-        santa.classList.remove("flipped-santa");
-        santa.style.left = `${e.pageX - santaRect.width}px`;
+        santaContainer.classList.remove('flipped-santa');
+        santaContainer.style.left = `${e.pageX}px`;
+        santaContainer.style.top = `${e.pageY}px`;
       }
 
       lastPosition = e.pageX;
-      santa.style.top = `${e.pageY}px`;
     });
-  }
 
-  function appendStyles() {
-    const style = createElement("style");
-    style.innerText = `
-        #snow-container {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            pointer-events: none;
-        }
-      `;
-    addChild(document.head, style);
-  }
-
-  appendStyles();
-
-  const flakes = ["images/flake.png", "images/flake2.png", "images/flake3.png"];
-
-  const startButton = document.querySelector("#start");
-
-  startButton.addEventListener(
-    "click",
-    () => {
-      const snowContainer = renderSnowContainer();
-      generateFlakes(snowContainer, flakes);
-      renderSanta(snowContainer);
-
-      startButton.remove();
-    },
-    { once: true }
-  );
-}
+    button.remove();
+  },
+  { once: true }
+);
