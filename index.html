@@ -54,18 +54,18 @@
 
       @keyframes leftToRight {
         from {
-          left: 0%;
+          transform: translate(0%);
         }
 
         to {
-          left: 100%;
+          transform: translate(100%);
         }
       }
 
       .flake-container {
         position: absolute;
         padding: 0 50px;
-        top: 0;
+        transform: translate(0);
 
         animation: fall 10s 0s 1 linear forwards;
       }
@@ -89,17 +89,17 @@
 
       @keyframes moveUpAndDown {
         from {
-          top: -20px;
+          transform: translateY(-20px);
         }
 
         to {
-          top: 20px;
+          transform: translateY(20px);
         }
       }
 
       .reindeer-container {
         position: relative;
-        top: -20px;
+        transform: translateY(-20px);
         padding: 20px 0;
         animation: moveUpAndDown 2s 0s infinite alternate ease-in-out;
       }
